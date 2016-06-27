@@ -1,0 +1,55 @@
+// Playground - noun: a place where people can play
+ 
+import Cocoa
+ 
+// Snakes and Ladders Game
+ 
+let finalSquare = 25 // 25 squares in the game (0 to 24)
+ 
+// init all squares to 0 and included a 26th square (to simplify the code)
+// Note: you can use var or let to define the array board (Apple uses var, I'm using let)
+// - let makes board a constant but values of a const array are still mutable
+// - its the number of elements in the array that are immutable
+// - using let allows the compiler to optimize looking up values in the array
+let board = Int[] (count: finalSquare + 1, repeatedValue: 0)
+ 
+// in 4 squares as ladders (+ values) and 4 squares as snakes (- values)
+// ladders move the player forward by value in square
+// snakes move the player backward by value in square
+board[03] = +08; board[06] = +11; board[09] = +09; board[10] = +02
+board[14] = -10; board[19] = -11; board[22] = -02; board[24] = -08
+ 
+var square = 0   // player position
+var diceRoll = 0 // moves are determined by an 8-sided die
+ 
+println("Game Starting at square \(square)")
+// start the game
+while square < finalSquare {
+  
+  // the Apple sample code used a rather useless means of rolling a dice by
+  // incrementing a value.
+  // I see why they did that: a more real world example requires the un-swifty 
+  // C function arc4random_uniform().
+  // Later on the book Apple shows you how to use a generator class to create
+  // a random number but frankly, that is overkill.
+  
+  // I betcha Apple to introduce a Swifty library of math functions that will 
+  // hide the ugliness of arc4random_uniform() with something like randInt()
+  
+  let diceRoll = Int(arc4random_uniform(7))
+  
+  // move by the rolled amount
+  square += diceRoll
+  
+  if square < board.count {
+    
+    // if the player is still on the board do what the current square instructs
+    let oldSquare = square // extra let created for printing the results since square's value has changed
+    square += board[square]
+    
+    println("diceRoll = \(diceRoll), landing = \(oldSquare), instruction = \(board[oldSquare]), destination = \(square)")
+ 
+  }
+}
+ 
+println("Game over at square \(square)")
