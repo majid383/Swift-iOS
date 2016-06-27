@@ -1,0 +1,53 @@
+func randNum(limit: Int) -> Int {
+  return Int(arc4random_uniform(UInt32(limit)))
+}
+ 
+// start the game
+println("Game Starting at square \(square)")
+ 
+var gameOver = false
+ 
+gameLoop: while square != finalSquare {
+  diceRoll = randNum(7)
+  switch square + diceRoll {
+  case finalSquare:
+    // diceRolled moved player to finalSquare
+    // game over
+    print("starting \(square), ")
+    print("diceRoll \(diceRoll), ")
+    print("destination \(square + diceRoll), Game Over")
+    println()
+    
+    // Swift didn't recognise the loop's label so I commented it out
+    // This teams the break only breaks out of the switch
+    // The gameOver flag is used to break out of the while loop
+    gameOver = true
+    break //gameloop
+  case let newSquare where newSquare > finalSquare:
+    // diceRoll moved player beyound finalSquare
+    // roll again
+    print("starting \(square), ")
+    print("diceRoll \(diceRoll), ")
+    print("destination \(square + diceRoll), Re-roll")
+    println()
+    
+    // Swift didn't recognise the loop's label but in this case
+    // it doesn't matter...
+    continue //gameloop
+  default:
+    // valid move
+    // update board
+    print("starting \(square), ")
+    print("diceRoll \(diceRoll), ")
+    square += diceRoll
+    print("destination \(square), ")
+    print("instruction \(board[square]), ")
+    square += board[square]
+    print("result \(square)")
+    println()
+  }
+  // if flag is set break out of the while loop
+  if gameOver {
+    break
+  }
+}
